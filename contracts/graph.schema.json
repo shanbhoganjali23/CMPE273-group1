@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "graph",
+  "type": "object",
+  "properties": {
+    "traceId": {
+      "type": "string",
+      "pattern": "^(?!0{32}$)[0-9a-f]{32}$"
+    },
+    "completeness": {
+      "type": "string",
+      "enum": [
+        "COMPLETE",
+        "PARTIAL"
+      ]
+    },
+    "gaps": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 2048
+      },
+      "maxItems": 100
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{32}:[0-9a-f]{16}$"
+          },
+          "traceId": {
+            "type": "string",
+            "pattern": "^(?!0{32}$)[0-9a-f]{32}$"
+          },
+          "spanId": {
+            "type": "string",
+            "pattern": "^(?!0{16}$)[0-9a-f]{16}$"
+          },
+          "service": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          },
+          "operation": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "required": [
+          "id",
+          "traceId",
+          "spanId",
+          "service",
+          "operation"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 200,
+      "minItems": 1
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "source": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          },
+          "target": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "PARENT_CHILD",
+              "SPAN_LINK",
+              "MESSAGE_CORRELATION"
+            ]
+          },
+          "eventId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "id",
+          "source",
+          "target",
+          "type"
+        ],
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "type": {
+                  "const": "MESSAGE_CORRELATION"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "eventId"
+              ]
+            }
+          }
+        ]
+      },
+      "maxItems": 400
+    }
+  },
+  "required": [
+    "traceId",
+    "completeness",
+    "gaps",
+    "nodes",
+    "edges"
+  ],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "completeness": {
+            "const": "COMPLETE"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "gaps": {
+            "maxItems": 0
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "gaps": {
+            "minItems": 1
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "status": "PROPOSED",
+  "actions": [
+    {
+      "actionId": "CLEAR_PAYMENT_FAULT_AND_RETRY_ORDER",
+      "targetType": "ORDER",
+      "requiresApproval": true,
+      "steps": [
+        "CLEAR_PAYMENT_FAULT",
+        "RECONCILE_PAYMENT",
+        "RE_RESERVE_IF_RELEASED",
+        "RETRY_ORDER",
+        "VERIFY_BUSINESS_RESULT"
+      ]
+    }
+  ]
+}

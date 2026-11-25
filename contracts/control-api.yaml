@@ -1,0 +1,790 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "AgentMesh control API (PROPOSED)",
+    "version": "0.1.0",
+    "description": "Unapproved draft. Shared protocol: ../docs/contract-protocol.md. Authentication mechanism unresolved; absence of a security scheme is not permission for anonymous access."
+  },
+  "paths": {
+    "/incidents": {
+      "get": {
+        "operationId": "control_get__incidents",
+        "description": "Bounded list, proposed maximum 100 recent incidents.",
+        "parameters": [
+          {
+            "name": "traceparent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^00-(?!0{32}-)[0-9a-f]{32}-(?!0{16}-)[0-9a-f]{16}-[0-9a-f]{2}$"
+            }
+          },
+          {
+            "name": "tracestate",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful result; duplicate mutations return original result.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "common.schema.json#/$defs/IncidentList"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Idempotency payload conflict, stale generation/version or illegal transition.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Deadline exceeded; mutation outcome may be unknown.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          }
+        },
+        "x-access": "PROTECTED_AUTH_TBD"
+      }
+    },
+    "/incidents/{incidentId}": {
+      "get": {
+        "operationId": "control_get__incidents__incidentId_",
+        "description": "Immutable evidence and timeline.",
+        "parameters": [
+          {
+            "name": "incidentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "traceparent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^00-(?!0{32}-)[0-9a-f]{32}-(?!0{16}-)[0-9a-f]{16}-[0-9a-f]{2}$"
+            }
+          },
+          {
+            "name": "tracestate",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful result; duplicate mutations return original result.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "common.schema.json#/$defs/Incident"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Idempotency payload conflict, stale generation/version or illegal transition.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Deadline exceeded; mutation outcome may be unknown.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          }
+        },
+        "x-access": "PROTECTED_AUTH_TBD"
+      }
+    },
+    "/incidents/{incidentId}/actions": {
+      "post": {
+        "operationId": "control_post__incidents__incidentId__actions",
+        "description": "Policy validates exact target/catalogue; starts PENDING_APPROVAL.",
+        "parameters": [
+          {
+            "name": "incidentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            }
+          },
+          {
+            "name": "traceparent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^00-(?!0{32}-)[0-9a-f]{32}-(?!0{16}-)[0-9a-f]{16}-[0-9a-f]{2}$"
+            }
+          },
+          {
+            "name": "tracestate",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful result; duplicate mutations return original result.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "common.schema.json#/$defs/RecoveryAction"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Idempotency payload conflict, stale generation/version or illegal transition.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Deadline exceeded; mutation outcome may be unknown.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          }
+        },
+        "x-access": "PROTECTED_AUTH_TBD",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "common.schema.json#/$defs/ActionRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/actions/{recoveryActionId}/approval": {
+      "post": {
+        "operationId": "control_post__actions__recoveryActionId__approval",
+        "description": "Identity from authenticated principal, never body; expectedVersion prevents races.",
+        "parameters": [
+          {
+            "name": "recoveryActionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            }
+          },
+          {
+            "name": "traceparent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^00-(?!0{32}-)[0-9a-f]{32}-(?!0{16}-)[0-9a-f]{16}-[0-9a-f]{2}$"
+            }
+          },
+          {
+            "name": "tracestate",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful result; duplicate mutations return original result.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "common.schema.json#/$defs/RecoveryAction"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Idempotency payload conflict, stale generation/version or illegal transition.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Deadline exceeded; mutation outcome may be unknown.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          }
+        },
+        "x-access": "PROTECTED_AUTH_TBD",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "common.schema.json#/$defs/Approval"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/actions/{recoveryActionId}": {
+      "get": {
+        "operationId": "control_get__actions__recoveryActionId_",
+        "description": "Execution audit and independent verification.",
+        "parameters": [
+          {
+            "name": "recoveryActionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "traceparent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^00-(?!0{32}-)[0-9a-f]{32}-(?!0{16}-)[0-9a-f]{16}-[0-9a-f]{2}$"
+            }
+          },
+          {
+            "name": "tracestate",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful result; duplicate mutations return original result.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "common.schema.json#/$defs/RecoveryAction"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Idempotency payload conflict, stale generation/version or illegal transition.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Deadline exceeded; mutation outcome may be unknown.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          }
+        },
+        "x-access": "PROTECTED_AUTH_TBD"
+      }
+    },
+    "/health/live": {
+      "get": {
+        "operationId": "control_health_live",
+        "responses": {
+          "200": {
+            "description": "Healthy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "common.schema.json#/$defs/Health"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health/ready": {
+      "get": {
+        "operationId": "control_health_ready",
+        "responses": {
+          "200": {
+            "description": "Healthy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "common.schema.json#/$defs/Health"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

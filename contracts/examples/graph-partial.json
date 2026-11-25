@@ -1,0 +1,32 @@
+{
+  "traceId": "4bf92f3577b34da6a3ce929d0e0e4736",
+  "completeness": "PARTIAL",
+  "gaps": [
+    "Missing consumer context; event correlation is not parentage."
+  ],
+  "nodes": [
+    {
+      "id": "4bf92f3577b34da6a3ce929d0e0e4736:00f067aa0ba902b7",
+      "traceId": "4bf92f3577b34da6a3ce929d0e0e4736",
+      "spanId": "00f067aa0ba902b7",
+      "service": "order-service",
+      "operation": "publish"
+    },
+    {
+      "id": "11111111111111111111111111111111:1111111111111111",
+      "traceId": "11111111111111111111111111111111",
+      "spanId": "1111111111111111",
+      "service": "worker-service",
+      "operation": "process"
+    }
+  ],
+  "edges": [
+    {
+      "id": "00000000-0000-4000-8000-000000000003",
+      "source": "4bf92f3577b34da6a3ce929d0e0e4736:00f067aa0ba902b7",
+      "target": "11111111111111111111111111111111:1111111111111111",
+      "type": "MESSAGE_CORRELATION",
+      "eventId": "00000000-0000-4000-8000-000000000002"
+    }
+  ]
+}

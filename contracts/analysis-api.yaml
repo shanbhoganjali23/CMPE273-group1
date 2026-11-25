@@ -1,0 +1,353 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "AgentMesh analysis API (PROPOSED)",
+    "version": "0.1.0",
+    "description": "Unapproved draft. Shared protocol: ../docs/contract-protocol.md. Authentication mechanism unresolved; absence of a security scheme is not permission for anonymous access."
+  },
+  "paths": {
+    "/traces/{traceId}/graph": {
+      "get": {
+        "operationId": "analysis_get__traces__traceId__graph",
+        "description": "Recorded spans only; partial gaps explicit, absent 404, backend unavailable 503.",
+        "parameters": [
+          {
+            "name": "traceId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^(?!0{32}$)[0-9a-f]{32}$"
+            }
+          },
+          {
+            "name": "traceparent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^00-(?!0{32}-)[0-9a-f]{32}-(?!0{16}-)[0-9a-f]{16}-[0-9a-f]{2}$"
+            }
+          },
+          {
+            "name": "tracestate",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful result; duplicate mutations return original result.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "graph.schema.json"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Idempotency payload conflict, stale generation/version or illegal transition.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Deadline exceeded; mutation outcome may be unknown.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          }
+        },
+        "x-access": "PROTECTED_AUTH_TBD"
+      }
+    },
+    "/analysis": {
+      "post": {
+        "operationId": "analysis_post__analysis",
+        "description": "Validate evidence/action/target membership. Unavailable diagnosis is explicit; transport/provider errors use standard errors.",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            }
+          },
+          {
+            "name": "traceparent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^00-(?!0{32}-)[0-9a-f]{32}-(?!0{16}-)[0-9a-f]{16}-[0-9a-f]{2}$"
+            }
+          },
+          {
+            "name": "tracestate",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful result; duplicate mutations return original result.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "diagnosis.schema.json"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Idempotency payload conflict, stale generation/version or illegal transition.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Standard error; see shared protocol.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Deadline exceeded; mutation outcome may be unknown.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          }
+        },
+        "x-access": "PROTECTED_AUTH_TBD",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "common.schema.json#/$defs/AnalysisRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health/live": {
+      "get": {
+        "operationId": "analysis_health_live",
+        "responses": {
+          "200": {
+            "description": "Healthy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "common.schema.json#/$defs/Health"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health/ready": {
+      "get": {
+        "operationId": "analysis_health_ready",
+        "responses": {
+          "200": {
+            "description": "Healthy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "common.schema.json#/$defs/Health"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "error.schema.json"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

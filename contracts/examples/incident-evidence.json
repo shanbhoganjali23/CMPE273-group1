@@ -1,0 +1,17 @@
+{
+  "incidentId": "00000000-0000-4000-8000-000000000004",
+  "targetOrderId": "00000000-0000-4000-8000-000000000001",
+  "records": [
+    {
+      "id": "00000000-0000-4000-8000-000000000005",
+      "type": "LOG",
+      "source": "payment-service",
+      "timestamp": "2026-11-24T18:00:00Z",
+      "data": {
+        "summary": "Synthetic controlled payment error",
+        "reference": "fixture:payment-error"
+      },
+      "availability": "AVAILABLE"
+    }
+  ]
+}

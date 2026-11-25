@@ -1,0 +1,722 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "UUID": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "TraceId": {
+      "type": "string",
+      "pattern": "^(?!0{32}$)[0-9a-f]{32}$"
+    },
+    "SpanId": {
+      "type": "string",
+      "pattern": "^(?!0{16}$)[0-9a-f]{16}$"
+    },
+    "Timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "Z$"
+    },
+    "Generation": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "OrderState": {
+      "type": "string",
+      "enum": [
+        "PENDING",
+        "PROCESSING",
+        "COMPLETED",
+        "FAILED",
+        "REVIEW_REQUIRED"
+      ]
+    },
+    "Item": {
+      "type": "object",
+      "properties": {
+        "itemId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "quantity": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        }
+      },
+      "required": [
+        "itemId",
+        "quantity"
+      ],
+      "additionalProperties": false
+    },
+    "Target": {
+      "type": "object",
+      "properties": {
+        "actionId": {
+          "const": "CLEAR_PAYMENT_FAULT_AND_RETRY_ORDER"
+        },
+        "targetOrderId": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "required": [
+        "actionId",
+        "targetOrderId"
+      ],
+      "additionalProperties": false
+    },
+    "Order": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "status": {
+          "$ref": "common.schema.json#/$defs/OrderState"
+        },
+        "traceId": {
+          "type": "string",
+          "pattern": "^(?!0{32}$)[0-9a-f]{32}$"
+        },
+        "reservationGeneration": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "attempt": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "orderId",
+        "status",
+        "traceId",
+        "reservationGeneration",
+        "attempt",
+        "version"
+      ],
+      "additionalProperties": false
+    },
+    "Outcome": {
+      "type": "object",
+      "properties": {
+        "outcomeId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "eventId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "reservationGeneration": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "attempt": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "result": {
+          "type": "string",
+          "enum": [
+            "SUCCEEDED",
+            "FAILED",
+            "UNKNOWN"
+          ]
+        },
+        "paymentOrderId": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "required": [
+        "outcomeId",
+        "eventId",
+        "reservationGeneration",
+        "attempt",
+        "result",
+        "paymentOrderId"
+      ],
+      "additionalProperties": false
+    },
+    "Retry": {
+      "type": "object",
+      "properties": {
+        "recoveryAttemptId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "expectedVersion": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "recoveryAttemptId",
+        "expectedVersion"
+      ],
+      "additionalProperties": false
+    },
+    "ReservationRequest": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "reservationGeneration": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "item": {
+          "$ref": "common.schema.json#/$defs/Item"
+        }
+      },
+      "required": [
+        "orderId",
+        "reservationGeneration",
+        "item"
+      ],
+      "additionalProperties": false
+    },
+    "Reservation": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "reservationGeneration": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "item": {
+          "$ref": "common.schema.json#/$defs/Item"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "RESERVED",
+            "REJECTED",
+            "RELEASED"
+          ]
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "orderId",
+        "reservationGeneration",
+        "item",
+        "status",
+        "version"
+      ],
+      "additionalProperties": false
+    },
+    "Release": {
+      "type": "object",
+      "properties": {
+        "reservationGeneration": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "reservationGeneration"
+      ],
+      "additionalProperties": false
+    },
+    "PaymentRequest": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "item": {
+          "$ref": "common.schema.json#/$defs/Item"
+        }
+      },
+      "required": [
+        "orderId",
+        "item"
+      ],
+      "additionalProperties": false
+    },
+    "Payment": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "paymentId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "SUCCEEDED",
+            "FAILED",
+            "UNKNOWN"
+          ]
+        }
+      },
+      "required": [
+        "orderId",
+        "paymentId",
+        "status"
+      ],
+      "additionalProperties": false
+    },
+    "FailedWork": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "eventId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "reservationGeneration": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "attempt": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "RETRY_PENDING",
+            "DEAD_LETTERED",
+            "REVIEW_REQUIRED"
+          ]
+        },
+        "lastErrorCode": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        }
+      },
+      "required": [
+        "orderId",
+        "eventId",
+        "reservationGeneration",
+        "attempt",
+        "state",
+        "lastErrorCode"
+      ],
+      "additionalProperties": false
+    },
+    "PaymentFault": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "none",
+            "error",
+            "latency"
+          ]
+        },
+        "ttlSeconds": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 300
+        },
+        "latencyMs": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5000
+        }
+      },
+      "required": [
+        "mode",
+        "ttlSeconds"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "mode": {
+                "const": "latency"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "latencyMs"
+            ]
+          },
+          "else": {
+            "not": {
+              "required": [
+                "latencyMs"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "WorkerFault": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "none",
+            "pause"
+          ]
+        },
+        "ttlSeconds": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 300
+        },
+        "latencyMs": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5000
+        }
+      },
+      "required": [
+        "mode",
+        "ttlSeconds"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "mode": {
+                "const": "latency"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "latencyMs"
+            ]
+          },
+          "else": {
+            "not": {
+              "required": [
+                "latencyMs"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "Approval": {
+      "type": "object",
+      "properties": {
+        "decision": {
+          "type": "string",
+          "enum": [
+            "APPROVE",
+            "REJECT"
+          ]
+        },
+        "expectedVersion": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "decision",
+        "expectedVersion"
+      ],
+      "additionalProperties": false
+    },
+    "ActionRequest": {
+      "type": "object",
+      "properties": {
+        "actionId": {
+          "const": "CLEAR_PAYMENT_FAULT_AND_RETRY_ORDER"
+        },
+        "targetOrderId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "expectedIncidentVersion": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "actionId",
+        "targetOrderId",
+        "expectedIncidentVersion"
+      ],
+      "additionalProperties": false
+    },
+    "RecoveryAction": {
+      "type": "object",
+      "properties": {
+        "recoveryActionId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "incidentId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "actionId": {
+          "const": "CLEAR_PAYMENT_FAULT_AND_RETRY_ORDER"
+        },
+        "targetOrderId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "PENDING_APPROVAL",
+            "APPROVED",
+            "REJECTED",
+            "EXECUTING",
+            "VERIFYING",
+            "SUCCEEDED",
+            "FAILED",
+            "REVIEW_REQUIRED"
+          ]
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "approverIdentity": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "verification": {
+          "type": "object",
+          "properties": {
+            "orderCompleted": {
+              "type": "boolean"
+            },
+            "uniquePayment": {
+              "type": "boolean"
+            },
+            "stockCorrect": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "orderCompleted",
+            "uniquePayment",
+            "stockCorrect"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "recoveryActionId",
+        "incidentId",
+        "actionId",
+        "targetOrderId",
+        "status",
+        "version"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "SUCCEEDED"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "verification"
+            ],
+            "properties": {
+              "verification": {
+                "type": "object",
+                "properties": {
+                  "orderCompleted": {
+                    "const": true
+                  },
+                  "uniquePayment": {
+                    "const": true
+                  },
+                  "stockCorrect": {
+                    "const": true
+                  }
+                },
+                "required": [
+                  "orderCompleted",
+                  "uniquePayment",
+                  "stockCorrect"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        }
+      ]
+    },
+    "Health": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "UP",
+            "DOWN"
+          ]
+        }
+      },
+      "required": [
+        "status"
+      ],
+      "additionalProperties": false
+    },
+    "Incident": {
+      "type": "object",
+      "properties": {
+        "incidentId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "targetOrderId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "OPEN",
+            "ANALYZING",
+            "AWAITING_APPROVAL",
+            "RECOVERING",
+            "VERIFYING",
+            "RESOLVED"
+          ]
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "evidence": {
+          "$ref": "incident-evidence.schema.json"
+        },
+        "diagnosis": {
+          "$ref": "diagnosis.schema.json"
+        },
+        "timeline": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "timestamp": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "Z$"
+              },
+              "event": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              }
+            },
+            "required": [
+              "timestamp",
+              "event"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 100
+        }
+      },
+      "required": [
+        "incidentId",
+        "targetOrderId",
+        "status",
+        "version",
+        "evidence",
+        "timeline"
+      ],
+      "additionalProperties": false
+    },
+    "IncidentList": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/Incident"
+      },
+      "maxItems": 100
+    },
+    "AnalysisRequest": {
+      "type": "object",
+      "properties": {
+        "requestId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "incidentId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "targetOrderId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "traceIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(?!0{32}$)[0-9a-f]{32}$"
+          },
+          "maxItems": 10
+        },
+        "evidence": {
+          "$ref": "incident-evidence.schema.json"
+        },
+        "graph": {
+          "$ref": "graph.schema.json"
+        },
+        "allowedActionIds": {
+          "type": "array",
+          "items": {
+            "const": "CLEAR_PAYMENT_FAULT_AND_RETRY_ORDER"
+          },
+          "maxItems": 1
+        }
+      },
+      "required": [
+        "requestId",
+        "incidentId",
+        "targetOrderId",
+        "traceIds",
+        "evidence",
+        "graph",
+        "allowedActionIds"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

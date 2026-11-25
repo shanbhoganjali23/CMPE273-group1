@@ -1,0 +1,10 @@
+{
+  "diagnosisId": "00000000-0000-4000-8000-000000000006",
+  "incidentId": "00000000-0000-4000-8000-000000000004",
+  "status": "UNAVAILABLE",
+  "reasonCode": "PROVIDER_UNAVAILABLE",
+  "message": "No provider configured",
+  "graphCompleteness": "PARTIAL",
+  "durationMs": 0,
+  "probableCause": "invented"
+}

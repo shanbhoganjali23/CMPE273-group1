@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "incident-evidence",
+  "type": "object",
+  "properties": {
+    "incidentId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "targetOrderId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "LOG",
+              "METRIC",
+              "TRACE",
+              "PROCESSING"
+            ]
+          },
+          "source": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "Z$"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "summary": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "reference": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              }
+            },
+            "required": [
+              "summary",
+              "reference"
+            ],
+            "additionalProperties": false
+          },
+          "availability": {
+            "type": "string",
+            "enum": [
+              "AVAILABLE",
+              "UNAVAILABLE"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "source",
+          "timestamp",
+          "data",
+          "availability"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 100
+    }
+  },
+  "required": [
+    "incidentId",
+    "targetOrderId",
+    "records"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "message",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "eventId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "eventType": {
+      "const": "order.created"
+    },
+    "orderId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "Z$"
+    },
+    "attempt": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 3
+    },
+    "reservationGeneration": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "traceparent": {
+          "type": "string",
+          "pattern": "^00-(?!0{32}-)[0-9a-f]{32}-(?!0{16}-)[0-9a-f]{16}-[0-9a-f]{2}$"
+        },
+        "tracestate": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        }
+      },
+      "required": [
+        "traceparent"
+      ],
+      "additionalProperties": false
+    },
+    "payload": {
+      "$ref": "common.schema.json#/$defs/Item"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "eventId",
+    "eventType",
+    "orderId",
+    "occurredAt",
+    "attempt",
+    "reservationGeneration",
+    "context",
+    "payload"
+  ],
+  "additionalProperties": false
+}
