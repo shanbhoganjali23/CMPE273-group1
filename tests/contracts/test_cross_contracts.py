@@ -2,7 +2,7 @@ import copy
 
 import pytest
 
-from conftest import read
+from tests.contracts.conftest import read
 
 
 def check_bundle(request, diagnosis):

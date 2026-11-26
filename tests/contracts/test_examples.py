@@ -1,7 +1,7 @@
 import pytest
 from jsonschema import Draft202012Validator, ValidationError
 
-from conftest import CONTRACTS, read, validator
+from tests.contracts.conftest import CONTRACTS, read, validator
 
 CASES = {
     'order-request': ('common.schema.json', 'Item'),
