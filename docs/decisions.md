@@ -1,7 +1,7 @@
 # Shared decisions awaiting review
 
 Status: Member 1 contract drafts approved by the user on November 24, 2026;
-cross-service agreements and technology choices remain PROPOSED. No approvals
+cross-service agreements and remaining technology choices remain PROPOSED. No approvals
 from other members have been received. Local contract validation is distinct
 from shared acceptance. All open questions below remain pending.
 
@@ -21,14 +21,37 @@ acceptance by connecting service owners or authorize later implementation work.
 Worker-to-Payment flow, compensation/re-reservation, replay and broker routing
 still need M2 agreement; evidence/action integration needs M3 agreement;
 telemetry/routing/ports/authentication need M4 agreement. Provider/model, privacy,
-budget and other technology choices remain unselected. Commit, push and PR
-creation have not been approved.
+budget and other technology choices remain unselected. This contract approval
+alone does not authorize commits, pushes or PR creation.
+
+## Runtime foundation agreement
+
+On November 25, 2026 the user reported that Java and Python/FastAPI are agreed,
+in response to the proposed Java 21/Spring Boot and Python 3.11/FastAPI stack,
+and authorized starting the Order/Analysis service foundation. This records the
+user's confirmation, not separate approvals received directly from other members.
+Spring Boot 3.5.16, Maven 3.9.11 and the Python pins in the Analysis manifest/lock
+are implementation selections validated on this branch; other owners must align
+shared build changes before merging. No provider, broker, telemetry, authentication,
+hosting or replay decision is resolved by this approval. This runtime agreement
+alone does not authorize commits or pushes.
+
+## Foundation commit approval
+
+On November 26, 2026 the user explicitly approved these three local commits:
+
+- `feat: add Java build and Order service health checks`
+- `feat: add FastAPI Analysis service foundation`
+- `build: add verified service containers and development instructions`
+
+This approval covers only the reviewed foundation changes on
+`feat/service-foundation`. Pushing and PR creation remain unapproved.
 
 ## Open team decisions
 
 | ID | Proposed decision / alternatives | Confirmation needed from | Gate |
 | --- | --- | --- | --- |
-| OQ01 | RabbitMQ; Java 21/Spring Boot; Python 3.11/FastAPI; React/Vite; Jaeger/Loki. Exact runtime versions unselected. Defer Redis/vector retrieval versus retaining README scope. Validator-only pins are in requirements-dev.txt. | All members | Runtime implementation |
+| OQ01 | Java 21/Spring Boot and Python 3.11/FastAPI agreed per user confirmation above. Remaining: RabbitMQ; React/Vite; Jaeger/Loki. Cross-service version alignment pending; local Order/Analysis implementation pins are recorded in their manifests and docs/development.md. Defer Redis/vector retrieval versus retaining README scope. | All members | Runtime implementation |
 | OQ02 | Order reserves Inventory; worker calls Payment versus direct Order→Payment. Inventory rejection fails order without publishing. Ambiguous reservation is queried using same generation before compensation. | M1/M2 | Business workflow |
 | OQ03 | One provider/model; no candidate selected. Agree quota, budget, evidence privacy, credentials and structured output support. | M1/user | Live model adapter/calls |
 | OQ04 | Single VM/Compose candidate versus managed hosting. Provider, region, resources, budget, domain, TLS and publishing authorization unselected. | M4/user | Provisioning/deployment |

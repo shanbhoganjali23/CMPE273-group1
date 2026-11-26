@@ -1,5 +1,12 @@
 # AgentMesh: Distributed AI Incident Detection and Response Platform
 
+## Development status
+
+Order and Analysis currently provide service skeletons and health endpoints only.
+See [development instructions](docs/development.md), [shared contract decisions](docs/decisions.md)
+and [contract semantics](docs/contract-protocol.md). The architecture and demo below
+remain project goals; business processing, AI and recovery are not implemented.
+
 ## Abstract
 
 AgentMesh is a distributed AI-assisted incident detection and response platform for microservice-based applications. The system monitors independent services such as Order, Inventory, and Payment Services, detects failures, collects logs, metrics, and distributed traces, and uses an AI analysis service to identify probable root causes.

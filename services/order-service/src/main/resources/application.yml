@@ -1,0 +1,22 @@
+server:
+  address: ${ORDER_BIND_HOST:127.0.0.1}
+  port: ${ORDER_PORT:8081}
+  shutdown: graceful
+spring:
+  application:
+    name: order-service
+  flyway:
+    enabled: false # No business tables/migrations yet.
+management:
+  endpoints:
+    enabled-by-default: false
+logging:
+  structured:
+    format:
+      console: logstash
+agentmesh:
+  database:
+    enabled: ${ORDER_DATABASE_ENABLED:false}
+    url: ${ORDER_DATABASE_URL:}
+    username: ${ORDER_DATABASE_USER:}
+    password: ${ORDER_DATABASE_PASSWORD:}

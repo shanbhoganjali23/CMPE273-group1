@@ -6,7 +6,7 @@ import pytest
 import yaml
 from openapi_spec_validator import validate
 
-from conftest import CONTRACTS, read
+from tests.contracts.conftest import CONTRACTS, read
 
 APIS = sorted(CONTRACTS.glob('*-api.yaml'))
 
@@ -56,7 +56,7 @@ def test_shared_errors_and_mutation_keys():
 
 
 def test_http_exchanges_cover_every_operation():
-    from conftest import validator
+    from tests.contracts.conftest import validator
     exchanges = read('examples/http-exchanges.json')
     expected = {(p.name, method, route) for p in APIS
                 for route, methods in read(p.name)['paths'].items()
