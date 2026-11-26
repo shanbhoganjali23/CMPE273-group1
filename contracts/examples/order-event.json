@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "eventId": "00000000-0000-4000-8000-000000000002",
+  "eventType": "order.created",
+  "orderId": "00000000-0000-4000-8000-000000000001",
+  "occurredAt": "2026-11-24T18:00:00Z",
+  "attempt": 1,
+  "reservationGeneration": 0,
+  "context": {
+    "traceparent": "00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01"
+  },
+  "payload": {
+    "itemId": "demo-item",
+    "quantity": 1
+  }
+}

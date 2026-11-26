@@ -1,0 +1,8 @@
+{
+  "recoveryActionId": "00000000-0000-4000-8000-000000000007",
+  "incidentId": "00000000-0000-4000-8000-000000000004",
+  "actionId": "CLEAR_PAYMENT_FAULT_AND_RETRY_ORDER",
+  "targetOrderId": "00000000-0000-4000-8000-000000000001",
+  "status": "PENDING_APPROVAL",
+  "version": 0
+}

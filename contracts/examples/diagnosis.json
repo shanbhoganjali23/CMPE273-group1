@@ -1,0 +1,19 @@
+{
+  "diagnosisId": "00000000-0000-4000-8000-000000000006",
+  "incidentId": "00000000-0000-4000-8000-000000000004",
+  "status": "AVAILABLE",
+  "probableCause": "Synthetic payment fault",
+  "evidenceIds": [
+    "00000000-0000-4000-8000-000000000005"
+  ],
+  "uncertainty": "Fixture only; no deeper cause established.",
+  "recommendedAction": {
+    "actionId": "CLEAR_PAYMENT_FAULT_AND_RETRY_ORDER",
+    "targetOrderId": "00000000-0000-4000-8000-000000000001",
+    "reason": "Clear controlled error and reconcile eligible order."
+  },
+  "modelId": "fixture-no-provider",
+  "promptVersion": "draft-1",
+  "graphCompleteness": "COMPLETE",
+  "durationMs": 0
+}

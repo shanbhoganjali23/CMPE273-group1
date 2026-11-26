@@ -1,0 +1,57 @@
+{
+  "requestId": "00000000-0000-4000-8000-000000000008",
+  "incidentId": "00000000-0000-4000-8000-000000000004",
+  "targetOrderId": "00000000-0000-4000-8000-000000000001",
+  "traceIds": [
+    "4bf92f3577b34da6a3ce929d0e0e4736"
+  ],
+  "evidence": {
+    "incidentId": "00000000-0000-4000-8000-000000000004",
+    "targetOrderId": "00000000-0000-4000-8000-000000000001",
+    "records": [
+      {
+        "id": "00000000-0000-4000-8000-000000000005",
+        "type": "LOG",
+        "source": "payment-service",
+        "timestamp": "2026-11-24T18:00:00Z",
+        "data": {
+          "summary": "Synthetic controlled payment error",
+          "reference": "fixture:payment-error"
+        },
+        "availability": "AVAILABLE"
+      }
+    ]
+  },
+  "graph": {
+    "traceId": "4bf92f3577b34da6a3ce929d0e0e4736",
+    "completeness": "COMPLETE",
+    "gaps": [],
+    "nodes": [
+      {
+        "id": "4bf92f3577b34da6a3ce929d0e0e4736:00f067aa0ba902b7",
+        "traceId": "4bf92f3577b34da6a3ce929d0e0e4736",
+        "spanId": "00f067aa0ba902b7",
+        "service": "order-service",
+        "operation": "publish"
+      },
+      {
+        "id": "4bf92f3577b34da6a3ce929d0e0e4736:1111111111111111",
+        "traceId": "4bf92f3577b34da6a3ce929d0e0e4736",
+        "spanId": "1111111111111111",
+        "service": "worker-service",
+        "operation": "process"
+      }
+    ],
+    "edges": [
+      {
+        "id": "00000000-0000-4000-8000-000000000003",
+        "source": "4bf92f3577b34da6a3ce929d0e0e4736:00f067aa0ba902b7",
+        "target": "4bf92f3577b34da6a3ce929d0e0e4736:1111111111111111",
+        "type": "PARENT_CHILD"
+      }
+    ]
+  },
+  "allowedActionIds": [
+    "CLEAR_PAYMENT_FAULT_AND_RETRY_ORDER"
+  ]
+}

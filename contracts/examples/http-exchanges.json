@@ -1,0 +1,397 @@
+[
+  {
+    "api": "worker-api.yaml",
+    "method": "get",
+    "path": "/internal/failed-work/{orderId}",
+    "status": "200",
+    "response": {
+      "orderId": "00000000-0000-4000-8000-000000000001",
+      "eventId": "00000000-0000-4000-8000-000000000001",
+      "reservationGeneration": 0,
+      "attempt": 1,
+      "state": "RETRY_PENDING",
+      "lastErrorCode": "synthetic-example"
+    }
+  },
+  {
+    "api": "worker-api.yaml",
+    "method": "put",
+    "path": "/internal/faults",
+    "status": "200",
+    "response": {
+      "mode": "none",
+      "ttlSeconds": 1
+    },
+    "request": {
+      "mode": "none",
+      "ttlSeconds": 1
+    }
+  },
+  {
+    "api": "control-api.yaml",
+    "method": "get",
+    "path": "/incidents",
+    "status": "200",
+    "response": []
+  },
+  {
+    "api": "control-api.yaml",
+    "method": "get",
+    "path": "/incidents/{incidentId}",
+    "status": "200",
+    "response": {
+      "incidentId": "00000000-0000-4000-8000-000000000001",
+      "targetOrderId": "00000000-0000-4000-8000-000000000001",
+      "status": "OPEN",
+      "version": 0,
+      "evidence": {
+        "incidentId": "00000000-0000-4000-8000-000000000001",
+        "targetOrderId": "00000000-0000-4000-8000-000000000001",
+        "records": []
+      },
+      "timeline": []
+    }
+  },
+  {
+    "api": "control-api.yaml",
+    "method": "post",
+    "path": "/incidents/{incidentId}/actions",
+    "status": "201",
+    "response": {
+      "recoveryActionId": "00000000-0000-4000-8000-000000000001",
+      "incidentId": "00000000-0000-4000-8000-000000000001",
+      "actionId": "CLEAR_PAYMENT_FAULT_AND_RETRY_ORDER",
+      "targetOrderId": "00000000-0000-4000-8000-000000000001",
+      "status": "PENDING_APPROVAL",
+      "version": 0
+    },
+    "request": {
+      "actionId": "CLEAR_PAYMENT_FAULT_AND_RETRY_ORDER",
+      "targetOrderId": "00000000-0000-4000-8000-000000000001",
+      "expectedIncidentVersion": 0
+    }
+  },
+  {
+    "api": "control-api.yaml",
+    "method": "post",
+    "path": "/actions/{recoveryActionId}/approval",
+    "status": "200",
+    "response": {
+      "recoveryActionId": "00000000-0000-4000-8000-000000000001",
+      "incidentId": "00000000-0000-4000-8000-000000000001",
+      "actionId": "CLEAR_PAYMENT_FAULT_AND_RETRY_ORDER",
+      "targetOrderId": "00000000-0000-4000-8000-000000000001",
+      "status": "PENDING_APPROVAL",
+      "version": 0
+    },
+    "request": {
+      "decision": "APPROVE",
+      "expectedVersion": 0
+    }
+  },
+  {
+    "api": "control-api.yaml",
+    "method": "get",
+    "path": "/actions/{recoveryActionId}",
+    "status": "200",
+    "response": {
+      "recoveryActionId": "00000000-0000-4000-8000-000000000001",
+      "incidentId": "00000000-0000-4000-8000-000000000001",
+      "actionId": "CLEAR_PAYMENT_FAULT_AND_RETRY_ORDER",
+      "targetOrderId": "00000000-0000-4000-8000-000000000001",
+      "status": "PENDING_APPROVAL",
+      "version": 0
+    }
+  },
+  {
+    "api": "order-api.yaml",
+    "method": "post",
+    "path": "/orders",
+    "status": "202",
+    "response": {
+      "orderId": "00000000-0000-4000-8000-000000000001",
+      "status": "PENDING",
+      "traceId": "4bf92f3577b34da6a3ce929d0e0e4736",
+      "reservationGeneration": 0,
+      "attempt": 1,
+      "version": 0
+    },
+    "request": {
+      "itemId": "synthetic-example",
+      "quantity": 1
+    }
+  },
+  {
+    "api": "order-api.yaml",
+    "method": "get",
+    "path": "/orders/{orderId}",
+    "status": "200",
+    "response": {
+      "orderId": "00000000-0000-4000-8000-000000000001",
+      "status": "PENDING",
+      "traceId": "4bf92f3577b34da6a3ce929d0e0e4736",
+      "reservationGeneration": 0,
+      "attempt": 1,
+      "version": 0
+    }
+  },
+  {
+    "api": "order-api.yaml",
+    "method": "post",
+    "path": "/internal/orders/{orderId}/outcomes",
+    "status": "200",
+    "response": {
+      "orderId": "00000000-0000-4000-8000-000000000001",
+      "status": "PENDING",
+      "traceId": "4bf92f3577b34da6a3ce929d0e0e4736",
+      "reservationGeneration": 0,
+      "attempt": 1,
+      "version": 0
+    },
+    "request": {
+      "outcomeId": "00000000-0000-4000-8000-000000000001",
+      "eventId": "00000000-0000-4000-8000-000000000001",
+      "reservationGeneration": 0,
+      "attempt": 1,
+      "result": "SUCCEEDED",
+      "paymentOrderId": "00000000-0000-4000-8000-000000000001"
+    }
+  },
+  {
+    "api": "order-api.yaml",
+    "method": "post",
+    "path": "/internal/orders/{orderId}/retries",
+    "status": "202",
+    "response": {
+      "orderId": "00000000-0000-4000-8000-000000000001",
+      "status": "PENDING",
+      "traceId": "4bf92f3577b34da6a3ce929d0e0e4736",
+      "reservationGeneration": 0,
+      "attempt": 1,
+      "version": 0
+    },
+    "request": {
+      "recoveryAttemptId": "00000000-0000-4000-8000-000000000001",
+      "expectedVersion": 0
+    }
+  },
+  {
+    "api": "analysis-api.yaml",
+    "method": "get",
+    "path": "/traces/{traceId}/graph",
+    "status": "200",
+    "response": {
+      "traceId": "4bf92f3577b34da6a3ce929d0e0e4736",
+      "completeness": "COMPLETE",
+      "gaps": [],
+      "nodes": [
+        {
+          "id": "4bf92f3577b34da6a3ce929d0e0e4736:00f067aa0ba902b7",
+          "traceId": "4bf92f3577b34da6a3ce929d0e0e4736",
+          "spanId": "00f067aa0ba902b7",
+          "service": "order-service",
+          "operation": "publish"
+        },
+        {
+          "id": "4bf92f3577b34da6a3ce929d0e0e4736:1111111111111111",
+          "traceId": "4bf92f3577b34da6a3ce929d0e0e4736",
+          "spanId": "1111111111111111",
+          "service": "worker-service",
+          "operation": "process"
+        }
+      ],
+      "edges": [
+        {
+          "id": "00000000-0000-4000-8000-000000000003",
+          "source": "4bf92f3577b34da6a3ce929d0e0e4736:00f067aa0ba902b7",
+          "target": "4bf92f3577b34da6a3ce929d0e0e4736:1111111111111111",
+          "type": "PARENT_CHILD"
+        }
+      ]
+    }
+  },
+  {
+    "api": "analysis-api.yaml",
+    "method": "post",
+    "path": "/analysis",
+    "status": "200",
+    "response": {
+      "diagnosisId": "00000000-0000-4000-8000-000000000006",
+      "incidentId": "00000000-0000-4000-8000-000000000004",
+      "status": "AVAILABLE",
+      "probableCause": "Synthetic payment fault",
+      "evidenceIds": [
+        "00000000-0000-4000-8000-000000000005"
+      ],
+      "uncertainty": "Fixture only; no deeper cause established.",
+      "recommendedAction": {
+        "actionId": "CLEAR_PAYMENT_FAULT_AND_RETRY_ORDER",
+        "targetOrderId": "00000000-0000-4000-8000-000000000001",
+        "reason": "Clear controlled error and reconcile eligible order."
+      },
+      "modelId": "fixture-no-provider",
+      "promptVersion": "draft-1",
+      "graphCompleteness": "COMPLETE",
+      "durationMs": 0
+    },
+    "request": {
+      "requestId": "00000000-0000-4000-8000-000000000008",
+      "incidentId": "00000000-0000-4000-8000-000000000004",
+      "targetOrderId": "00000000-0000-4000-8000-000000000001",
+      "traceIds": [
+        "4bf92f3577b34da6a3ce929d0e0e4736"
+      ],
+      "evidence": {
+        "incidentId": "00000000-0000-4000-8000-000000000004",
+        "targetOrderId": "00000000-0000-4000-8000-000000000001",
+        "records": [
+          {
+            "id": "00000000-0000-4000-8000-000000000005",
+            "type": "LOG",
+            "source": "payment-service",
+            "timestamp": "2026-11-24T18:00:00Z",
+            "data": {
+              "summary": "Synthetic controlled payment error",
+              "reference": "fixture:payment-error"
+            },
+            "availability": "AVAILABLE"
+          }
+        ]
+      },
+      "graph": {
+        "traceId": "4bf92f3577b34da6a3ce929d0e0e4736",
+        "completeness": "COMPLETE",
+        "gaps": [],
+        "nodes": [
+          {
+            "id": "4bf92f3577b34da6a3ce929d0e0e4736:00f067aa0ba902b7",
+            "traceId": "4bf92f3577b34da6a3ce929d0e0e4736",
+            "spanId": "00f067aa0ba902b7",
+            "service": "order-service",
+            "operation": "publish"
+          },
+          {
+            "id": "4bf92f3577b34da6a3ce929d0e0e4736:1111111111111111",
+            "traceId": "4bf92f3577b34da6a3ce929d0e0e4736",
+            "spanId": "1111111111111111",
+            "service": "worker-service",
+            "operation": "process"
+          }
+        ],
+        "edges": [
+          {
+            "id": "00000000-0000-4000-8000-000000000003",
+            "source": "4bf92f3577b34da6a3ce929d0e0e4736:00f067aa0ba902b7",
+            "target": "4bf92f3577b34da6a3ce929d0e0e4736:1111111111111111",
+            "type": "PARENT_CHILD"
+          }
+        ]
+      },
+      "allowedActionIds": [
+        "CLEAR_PAYMENT_FAULT_AND_RETRY_ORDER"
+      ]
+    }
+  },
+  {
+    "api": "payment-api.yaml",
+    "method": "post",
+    "path": "/internal/payments",
+    "status": "200",
+    "response": {
+      "orderId": "00000000-0000-4000-8000-000000000001",
+      "paymentId": "00000000-0000-4000-8000-000000000001",
+      "status": "SUCCEEDED"
+    },
+    "request": {
+      "orderId": "00000000-0000-4000-8000-000000000001",
+      "item": {
+        "itemId": "synthetic-example",
+        "quantity": 1
+      }
+    }
+  },
+  {
+    "api": "payment-api.yaml",
+    "method": "get",
+    "path": "/internal/payments/{orderId}",
+    "status": "200",
+    "response": {
+      "orderId": "00000000-0000-4000-8000-000000000001",
+      "paymentId": "00000000-0000-4000-8000-000000000001",
+      "status": "SUCCEEDED"
+    }
+  },
+  {
+    "api": "payment-api.yaml",
+    "method": "put",
+    "path": "/internal/faults",
+    "status": "200",
+    "response": {
+      "mode": "none",
+      "ttlSeconds": 1
+    },
+    "request": {
+      "mode": "none",
+      "ttlSeconds": 1
+    }
+  },
+  {
+    "api": "inventory-api.yaml",
+    "method": "post",
+    "path": "/internal/reservations",
+    "status": "200",
+    "response": {
+      "orderId": "00000000-0000-4000-8000-000000000001",
+      "reservationGeneration": 0,
+      "item": {
+        "itemId": "synthetic-example",
+        "quantity": 1
+      },
+      "status": "RESERVED",
+      "version": 0
+    },
+    "request": {
+      "orderId": "00000000-0000-4000-8000-000000000001",
+      "reservationGeneration": 0,
+      "item": {
+        "itemId": "synthetic-example",
+        "quantity": 1
+      }
+    }
+  },
+  {
+    "api": "inventory-api.yaml",
+    "method": "get",
+    "path": "/internal/reservations/{orderId}",
+    "status": "200",
+    "response": {
+      "orderId": "00000000-0000-4000-8000-000000000001",
+      "reservationGeneration": 0,
+      "item": {
+        "itemId": "synthetic-example",
+        "quantity": 1
+      },
+      "status": "RESERVED",
+      "version": 0
+    }
+  },
+  {
+    "api": "inventory-api.yaml",
+    "method": "post",
+    "path": "/internal/reservations/{orderId}/release",
+    "status": "200",
+    "response": {
+      "orderId": "00000000-0000-4000-8000-000000000001",
+      "reservationGeneration": 0,
+      "item": {
+        "itemId": "synthetic-example",
+        "quantity": 1
+      },
+      "status": "RESERVED",
+      "version": 0
+    },
+    "request": {
+      "reservationGeneration": 0
+    }
+  }
+]
